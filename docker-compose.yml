@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  backend:
+    container_name: nest
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile_nest_dev
+      args:
+        - VIMRC_PATH=${VIMRC_PATH:-.vimrc.example}
+    ports:
+      - ${NEST_CONTAINER_FORWARD_PORT:-3000}:3000
+    volumes:
+      - ./nest-project:/usr/src/app
+      - ~/.gitconfig:/etc/gitconfig
+    working_dir: /usr/src/app
+    tty: true
