@@ -13,9 +13,14 @@ config();
 
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { globalLoggerFunctionalMiddleware } from './middlewares/globalLogger.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Use Functional middleware in global scope.
+  app.use(globalLoggerFunctionalMiddleware);
+
   await app.listen(3000);
 }
 bootstrap();
