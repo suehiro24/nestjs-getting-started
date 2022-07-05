@@ -1,17 +1,41 @@
 import {
+  Body,
   Controller,
   Get,
   HttpStatus,
+  Inject,
   Param,
+  Post,
   Query,
   Redirect,
   Req,
   Res,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { Cat } from './interfaces/cat.interface';
+import { CatsServiceBase } from './interfaces/cat-service.interface';
+import { CreateCatDto } from './dto/create-cat.dto';
 
 @Controller('cats')
 export class CatsController {
+  constructor(
+    // private catsService: CatsService<string>,
+    private catsService: CatsServiceBase,
+    @Inject('STRING_VAL_TOKEN') private strValToken: string,
+  ) {}
+
+  @Post()
+  async create(@Body() createCatDto: CreateCatDto) {
+    this.catsService.create(createCatDto);
+  }
+
+  @Get()
+  async findAll(): Promise<Cat[]> {
+    console.log(process.env.NODE_ENV);
+    console.log(this.strValToken);
+    return this.catsService.findAll();
+  }
+
   @Get('simple-get')
   simpleGet(): string {
     return 'This action return all cats';
