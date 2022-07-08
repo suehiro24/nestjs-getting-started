@@ -1,0 +1,48 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Docker: Attach nest app",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "address": "localhost",
+      "localRoot": "${workspaceFolder}/nest-project",
+      "remoteRoot": "/usr/src/app",
+      "restart": true
+    },
+    {
+      "name": "Launch nest app",
+      "type": "node",
+      "request": "launch",
+      "args": ["${workspaceFolder}/nest-project/src/main.ts"],
+      "runtimeArgs": [
+        "--nolazy",
+        "-r",
+        "ts-node/register",
+        "-r",
+        "tsconfig-paths/register"
+      ],
+      "sourceMaps": true,
+      "envFile": "${workspaceFolder}/nest-project/.env",
+      "cwd": "${workspaceRoot}/nest-project",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Launch jest tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "node_modules/.bin/jest",
+        "--runInBand",
+        "--coverage",
+        "false"
+      ],
+      "sourceMaps": true,
+      "envFile": "${workspaceFolder}/nest-project/.env",
+      "cwd": "${workspaceRoot}/nest-project",
+      "console": "integratedTerminal"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   backend:
@@ -9,7 +9,8 @@ services:
       args:
         - VIMRC_PATH=${VIMRC_PATH:-.vimrc.example}
     ports:
-      - ${NEST_CONTAINER_FORWARD_PORT:-3000}:3000
+      - ${NEST_FORWARD_PORT:-3000}:3000
+      - ${NEST_FORWARD_PORT_DEBUG:-9229}:9229
     volumes:
       - ./nest-project:/usr/src/app
       - ~/.gitconfig:/etc/gitconfig
