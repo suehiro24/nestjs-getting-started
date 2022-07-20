@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
   HttpStatus,
   Inject,
   Param,
@@ -15,6 +16,7 @@ import { Request, Response } from 'express';
 import { Cat } from './interfaces/cat.interface';
 import { CatsServiceBase } from './interfaces/cat-service.interface';
 import { CreateCatDto } from './dto/create-cat.dto';
+import { MyForbiddenException } from 'src/exceptions/my-forbidden.exception';
 
 @Controller('cats')
 export class CatsController {
@@ -65,6 +67,16 @@ export class CatsController {
   @Get('use-param-directly/:id')
   useParamDirectly(@Param('id') id: string): string {
     return id;
+  }
+
+  @Get('throw-http-exception')
+  async throwHttpException() {
+    throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+  }
+
+  @Get('throw-http-exception-override-entire-body')
+  async throwHttpExceptionOverrideEntireBody() {
+    throw new MyForbiddenException();
   }
 
   @Get('req-with-lib-specific-mode/:id')
