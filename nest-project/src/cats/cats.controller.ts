@@ -11,13 +11,17 @@ import {
   Redirect,
   Req,
   Res,
+  UseFilters,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Cat } from './interfaces/cat.interface';
 import { CatsServiceBase } from './interfaces/cat-service.interface';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { MyForbiddenException } from 'src/exceptions/my-forbidden.exception';
+import { HttpExceptionFilter } from 'src/http-exception.filter';
+import { CatControllerExceptionFilter } from 'src/cat-controller-exception.filter';
 
+@UseFilters(CatControllerExceptionFilter)
 @Controller('cats')
 export class CatsController {
   constructor(
@@ -76,6 +80,13 @@ export class CatsController {
 
   @Get('throw-http-exception-override-entire-body')
   async throwHttpExceptionOverrideEntireBody() {
+    throw new MyForbiddenException();
+  }
+
+  @Get('throw-http-exception-and-use-filter')
+  // @UseFilters(new HttpExceptionFilter()) // instantiate manually
+  @UseFilters(HttpExceptionFilter) // DI
+  async throwHttpExceptionAndUseFilter() {
     throw new MyForbiddenException();
   }
 

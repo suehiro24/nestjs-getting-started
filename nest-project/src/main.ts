@@ -11,12 +11,19 @@
 import { config } from 'dotenv';
 config();
 
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { globalLoggerFunctionalMiddleware } from './middlewares/globalLogger.middleware';
+import { HttpExceptionFilter } from './http-exception.filter';
+import { AllExceptionsInheritanceFilter } from './all-exception-inheritance.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Use Exception filter in global scope.
+  // app.useGlobalFilters(new HttpExceptionFilter());
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsInheritanceFilter(httpAdapter));
 
   // Use Functional middleware in global scope.
   app.use(globalLoggerFunctionalMiddleware);

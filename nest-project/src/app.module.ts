@@ -10,11 +10,20 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { CatsModule } from './cats/cats.module';
 import { GlobalLoggerMiddleware } from './middlewares/globalLogger.middleware';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionsFilter } from './all-exceptions.filter';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }), UsersModule, CatsModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    // Use Exception filter in global scope with DI.
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
