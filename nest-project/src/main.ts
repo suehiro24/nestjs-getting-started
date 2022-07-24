@@ -22,8 +22,10 @@ async function bootstrap() {
 
   // Use Exception filter in global scope.
   // app.useGlobalFilters(new HttpExceptionFilter());
-  const { httpAdapter } = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new AllExceptionsInheritanceFilter(httpAdapter));
+
+  // Use Exception filter in global scope. (All Exception Handler)
+  // const { httpAdapter } = app.get(HttpAdapterHost);
+  // app.useGlobalFilters(new AllExceptionsInheritanceFilter(httpAdapter));
 
   // Use Functional middleware in global scope.
   app.use(globalLoggerFunctionalMiddleware);

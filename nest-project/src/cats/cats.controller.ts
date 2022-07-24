@@ -21,7 +21,7 @@ import { MyForbiddenException } from 'src/exceptions/my-forbidden.exception';
 import { HttpExceptionFilter } from 'src/http-exception.filter';
 import { CatControllerExceptionFilter } from 'src/cat-controller-exception.filter';
 
-@UseFilters(CatControllerExceptionFilter)
+// @UseFilters(CatControllerExceptionFilter)
 @Controller('cats')
 export class CatsController {
   constructor(
