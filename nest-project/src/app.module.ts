@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  RequestMethod,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import {
   loggerFunctionalMiddleware,
@@ -10,7 +15,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { CatsModule } from './cats/cats.module';
 import { GlobalLoggerMiddleware } from './middlewares/globalLogger.middleware';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { AllExceptionsFilter } from './all-exceptions.filter';
 
 @Module({
@@ -19,10 +24,15 @@ import { AllExceptionsFilter } from './all-exceptions.filter';
   providers: [
     AppService,
     // Use Exception filter in global scope with DI.
-    {
-      provide: APP_FILTER,
-      useClass: AllExceptionsFilter,
-    },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: AllExceptionsFilter,
+    // },
+    // Use Validation pipe in global scope with DI.
+    // {
+    //   provide: APP_PIPE,
+    //   useClass: ValidationPipe,
+    // },
   ],
 })
 export class AppModule {

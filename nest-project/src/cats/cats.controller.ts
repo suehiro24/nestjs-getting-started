@@ -6,12 +6,16 @@ import {
   HttpStatus,
   Inject,
   Param,
+  ParseIntPipe,
+  ParseUUIDPipe,
   Post,
   Query,
   Redirect,
   Req,
   Res,
   UseFilters,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Cat } from './interfaces/cat.interface';
@@ -20,6 +24,9 @@ import { CreateCatDto } from './dto/create-cat.dto';
 import { MyForbiddenException } from 'src/exceptions/my-forbidden.exception';
 import { HttpExceptionFilter } from 'src/http-exception.filter';
 import { CatControllerExceptionFilter } from 'src/cat-controller-exception.filter';
+import { JoiValidationPipe } from 'src/joi-validation.pipe';
+import Joi from 'joi';
+import { CatValidationPipe } from 'src/cat-validation.pipe';
 
 // @UseFilters(CatControllerExceptionFilter)
 @Controller('cats')
@@ -106,6 +113,48 @@ export class CatsController {
   ) {
     res.status(HttpStatus.OK);
     return [];
+  }
+
+  @Get('use-parse-int-pipe/:id')
+  useParseIntPipe(@Param('id', ParseIntPipe) id: number): number {
+    return id;
+  }
+
+  @Get('use-parse-int-pipe-query')
+  useParseIntPipeQuery(@Query('id', ParseIntPipe) id: number): number {
+    return id;
+  }
+
+  @Get('use-parse-uuid-pipe-with-option/:uuid')
+  useParseIntPipeWithOption(
+    @Param(
+      'uuid',
+      new ParseUUIDPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    id: string,
+  ): string {
+    return id;
+  }
+
+  // Need Joi Schema
+  // @Post('use-joi-validator')
+  // @UsePipes(new JoiValidationPipe(schema))
+  // async useJoiValidator(@Body() createCatDto: CreateCatDto) {
+  //   return createCatDto;
+  // }
+
+  @Post('use-custom-class-validator')
+  async useCustomClassValidator(
+    @Body(CatValidationPipe) createCatDto: CreateCatDto,
+  ) {
+    return createCatDto;
+  }
+
+  @Post('use-builtin-class-validator')
+  async useBuiltInClassValidator(
+    @Body(ValidationPipe) createCatDto: CreateCatDto,
+  ) {
+    return createCatDto;
   }
 
   // MEMO: The order of the handler functions are taken into consideration to following this issue

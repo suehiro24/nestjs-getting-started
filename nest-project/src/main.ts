@@ -16,9 +16,13 @@ import { AppModule } from './app.module';
 import { globalLoggerFunctionalMiddleware } from './middlewares/globalLogger.middleware';
 import { HttpExceptionFilter } from './http-exception.filter';
 import { AllExceptionsInheritanceFilter } from './all-exception-inheritance.filter';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Use Validation pipe in global scope.
+  // app.useGlobalPipes(new ValidationPipe());
 
   // Use Exception filter in global scope.
   // app.useGlobalFilters(new HttpExceptionFilter());
